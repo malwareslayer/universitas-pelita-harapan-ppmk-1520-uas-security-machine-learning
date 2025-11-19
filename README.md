@@ -1,2 +1,3 @@
-# universitas-pelita-harapan-ppmk-1520-uas-security-machine-learning
-Machine Learning SQL &amp; XSS Injection Detection
+# Universitas Pelita Harapan UAS Project PPMK 1520
+
+Machine Learning SQL & XSS Injection Detection
