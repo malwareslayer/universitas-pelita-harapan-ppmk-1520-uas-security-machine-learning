@@ -1,0 +1,69 @@
+[build-system]
+requires = ["poetry-core>=2.2.1"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "sqli-xss-ml-detector"
+version = "0.0.1.dev0"
+description = "A simple machine learning for detection SQL Injection and XSS"
+readme = "README.md"
+license = "MIT"
+authors = [
+  "Dwi Mulia Mokoginta <dwi-mulia-mokoginta@protonmail.com>",
+  "Sapwages Triazana",
+  "Sony Surahman",
+]
+package-mode = false
+
+packages = [
+  { include = "sqli", from = "src" }
+]
+
+[tool.poetry.dependencies]
+flask = ">=3.1.2"
+ipython = ">=9.7.0"
+marimo = ">=0.17.8"
+numpy = ">=2.3.5"
+pandas = ">=2.3.3"
+poetry = ">=2.2.1"
+poetry-core = ">=2.2.1"
+pydantic = ">=2.12.4"
+python = ">=3.11,<4.0"
+scikit-learn = ">=1.7.2"
+sqlglot = { version = ">=28.0.0", extras = ["rs"] }
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.6.9"
+
+[tool.poetry.scripts]
+sqli = "sqli.__main__:main"
+
+[tool.ruff]
+src = ["src"]
+exclude = [".venv"]
+fix = true
+show-fixes = true
+output-format = "full"
+line-length = 120
+indent-width = 2
+
+[tool.ruff.format]
+quote-style = "single"
+indent-style = "space"
+
+[tool.ruff.lint]
+select = [
+  "B",   # flake8-bugbear
+  "E",   # pycodestyle error
+  "F",   # pyflakes
+  "I",   # isort
+  "UP",  # pyupgrade
+  "W",   # pycodestyle warning
+]
+
+[tool.ruff.lint.isort]
+force-single-line = false
+order-by-type = false
+
+[egg_info]
+egg_base = "dist/.egg-info"
