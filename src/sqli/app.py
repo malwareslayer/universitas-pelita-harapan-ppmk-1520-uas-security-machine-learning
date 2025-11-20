@@ -10,8 +10,6 @@ import sqlglot
 from flask import Flask, jsonify, request, Response
 from pydantic import BaseModel, ValidationError
 
-DEFAULT = Path(__file__).parent / 'schema.py'
-
 flask = Flask(__name__, static_folder=None)
 
 
@@ -39,29 +37,19 @@ def count(walkers: list[sqlglot.exp.Expression], node_type):
   return sum(isinstance(n, node_type) for n in walkers)
 
 
-def create(host: str, port: int, db: sqlite3.Connection, lock: threading.Lock, schema: Path | None, **kwargs) -> None:
+def create(host: str, port: int, db: sqlite3.Connection, lock: threading.Lock, schema: Path, **kwargs) -> None:
   cursor = db.cursor()
 
   defaults = {'UserLoginSchema': 'POST', 'UserInsertSchema': 'POST'}
 
-  if not schema:
-    path = DEFAULT
+  if not schema.exists():
+    raise FileNotFoundError(f"Schema '{schema}' does not exist")
 
+  if schema == (Path(__file__).parent / 'schema.py').resolve():
     for k, v in defaults.items():
       kwargs.setdefault(k, v)
-  else:
-    if schema.exists():
-      if not kwargs:
-        raise RuntimeError("No schema routes defined. Example: UserLoginSchema='POST'")
 
-      path = schema
-    else:
-      path = DEFAULT
-
-      for k, v in defaults.items():
-        kwargs.setdefault(k, v)
-
-  spec = spec_from_file_location('schema', str(path))
+  spec = spec_from_file_location('schema', str(schema))
   module = module_from_spec(spec)
 
   spec.loader.exec_module(module)
@@ -121,7 +109,7 @@ def create(host: str, port: int, db: sqlite3.Connection, lock: threading.Lock, s
                     INSERT INTO payloads (payload, label, error)
                     VALUES (?, ?, ?)
                     """,
-                    (query.encode('ascii'), 1, 1),
+                    (query, 1, 1),
                   )
 
                   db.commit()
@@ -134,7 +122,7 @@ def create(host: str, port: int, db: sqlite3.Connection, lock: threading.Lock, s
                     INSERT INTO payloads (payload, label, error)
                     VALUES (?, ?, ?)
                     """,
-                    (query.encode('ascii'), 1, 0),
+                    (query, 1, 0),
                   )
 
                   rowid = cursor.lastrowid
@@ -273,7 +261,7 @@ def create(host: str, port: int, db: sqlite3.Connection, lock: threading.Lock, s
                     INSERT INTO payloads (payload, label, error)
                     VALUES (?, ?, ?)
                     """,
-                    (query.encode('ascii'), 1, 1),
+                    (query, 1, 1),
                   )
 
                   db.commit()
@@ -286,7 +274,7 @@ def create(host: str, port: int, db: sqlite3.Connection, lock: threading.Lock, s
                     INSERT INTO payloads (payload, label, error)
                     VALUES (?, ?, ?)
                     """,
-                    (query.encode('ascii'), 1, 0),
+                    (query, 1, 0),
                   )
 
                   rowid = cursor.lastrowid
@@ -425,7 +413,7 @@ def create(host: str, port: int, db: sqlite3.Connection, lock: threading.Lock, s
                     INSERT INTO payloads (payload, label, error)
                     VALUES (?, ?, ?)
                     """,
-                    (query.encode('ascii'), 1, 1),
+                    (query, 1, 1),
                   )
 
                   db.commit()
@@ -438,7 +426,7 @@ def create(host: str, port: int, db: sqlite3.Connection, lock: threading.Lock, s
                     INSERT INTO payloads (payload, label, error)
                     VALUES (?, ?, ?)
                     """,
-                    (query.encode('ascii'), 1, 0),
+                    (query, 1, 0),
                   )
 
                   rowid = cursor.lastrowid
