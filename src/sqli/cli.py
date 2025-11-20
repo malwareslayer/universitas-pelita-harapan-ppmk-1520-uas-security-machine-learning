@@ -32,7 +32,7 @@ def main(argv: Sequence[str] = None) -> int:
   flask_command = flask.add_subparsers(dest='flask')
 
   run = flask_command.add_parser('run', help='Run Flask Server')
-  run.add_argument('--label', type=int, default=0, help='Label for benign/malicious requests')
+  run.add_argument('--label', type=int, help='Label for benign/malicious requests')
   run.add_argument(
     '--host',
     type=str,
