@@ -20,9 +20,10 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
+faker = ">=38.2.0"
 flask = ">=3.1.2"
 ipython = ">=9.7.0"
-marimo = ">=0.17.8"
+marimo = { version = ">=0.17.8", extras = ["sql"] }
 numpy = ">=2.3.5"
 pandas = ">=2.3.3"
 poetry = ">=2.2.1"
@@ -30,6 +31,7 @@ poetry-core = ">=2.2.1"
 pydantic = ">=2.12.4"
 python = ">=3.11,<4.0"
 scikit-learn = ">=1.7.2"
+sqlalchemy = ">=2.0.44"
 sqlglot = { version = ">=28.0.0", extras = ["rs"] }
 
 [tool.poetry.group.dev.dependencies]
