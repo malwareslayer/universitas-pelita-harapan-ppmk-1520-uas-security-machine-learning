@@ -8,7 +8,7 @@ import requests
 SCHEMA_VERSION = 0
 
 
-def initialize(path: Path):
+def initialize(path: Path, schema: Path):
   location = path.resolve()
 
   if location.exists() or location.is_dir():
@@ -17,7 +17,7 @@ def initialize(path: Path):
   connection = sqlite3.connect(str(path.resolve()))
 
   try:
-    with open(path) as f:
+    with open(schema) as f:
       connection.executescript(f.read())
 
     connection.commit()
