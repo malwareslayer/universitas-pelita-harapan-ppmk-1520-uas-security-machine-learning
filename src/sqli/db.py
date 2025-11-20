@@ -1,7 +1,10 @@
 import sqlite3
+from importlib.util import module_from_spec, spec_from_file_location
 from pathlib import Path
 
-SCHEMA_PATH = (Path(__file__).resolve().parent / 'db' / 'schema.sql').resolve()
+import faker
+import requests
+
 SCHEMA_VERSION = 0
 
 
@@ -14,11 +17,11 @@ def initialize(path: Path):
   connection = sqlite3.connect(str(path.resolve()))
 
   try:
-    with open(SCHEMA_PATH) as f:
+    with open(path) as f:
       connection.executescript(f.read())
 
     connection.commit()
-  except (sqlite3.OperationalError, sqlite3.DatabaseError):
+  except (sqlite3.OperationalError, sqlite3.DatabaseError, FileNotFoundError):
     raise sqlite3.OperationalError('Failed to initialize database') from sqlite3.DatabaseError
 
   print('Database initialized successfully')
@@ -57,4 +60,41 @@ def check(path: Path):
   return connection
 
 
-__all__ = ['initialize', 'check']
+def generate(url: str, name: str, count: int, schema: Path):
+  if not schema.exists():
+    raise FileNotFoundError('Schema file not found')
+
+  spec = spec_from_file_location('schema', str(schema))
+  module = module_from_spec(spec)
+
+  spec.loader.exec_module(module)
+
+  try:
+    cls = getattr(module, name)
+  except AttributeError:
+    raise AttributeError(f'Pydantic schema {name} not found in {str(schema)}') from AttributeError
+
+  fields = cls.model_fields
+
+  fake = faker.Faker()
+
+  mapping = {
+    str: fake.word,
+    int: fake.random_int,
+    float: fake.pyfloat,
+    bool: fake.pybool,
+  }
+
+  data = []
+
+  for _ in range(count + 1):
+    data.append({f: mapping[t.annotation]() for f, t in fields.items() if t.annotation in mapping})
+
+  for json in data:
+    response = requests.post(f'{url}/{name}', json=json)
+
+    if response.status_code != 200:
+      raise ConnectionError(f'Failed to send data to {url}: {response.status_code}')
+
+
+__all__ = ['initialize', 'check', 'generate']
