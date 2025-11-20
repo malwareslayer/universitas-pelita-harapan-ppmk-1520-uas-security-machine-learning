@@ -49,7 +49,7 @@ def main(argv: Sequence[str] = None) -> int:
     case 'db':
       match args.db:
         case 'init':
-          initialize(args.path)
+          initialize(args.path, args.schema)
         case 'seed':
           generate(args.url, args.name, args.count, args.path)
         case _:
