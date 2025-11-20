@@ -57,7 +57,7 @@ def main(argv: Sequence[str] = None) -> int:
     case 'flask':
       match args.flask:
         case 'run':
-          create(args.host, args.port, check(args.database), threading.Lock(), args.schema)
+          create(args.label, args.host, args.port, check(args.database), threading.Lock(), args.schema)
         case _:
           raise NameError('Unknown command')
     case _:
