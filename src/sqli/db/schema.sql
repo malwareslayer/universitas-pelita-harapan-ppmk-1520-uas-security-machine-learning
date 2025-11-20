@@ -2,7 +2,7 @@ PRAGMA foreign_keys = ON;
 
 CREATE TABLE IF NOT EXISTS payloads (
   id      INTEGER PRIMARY KEY AUTOINCREMENT,
-  payload BLOB NOT NULL,
+  payload TEXT NOT NULL UNIQUE,
   label   INTEGER,
   error   INTEGER,
   created TEXT DEFAULT CURRENT_TIMESTAMP
