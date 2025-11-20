@@ -37,7 +37,9 @@ def count(walkers: list[sqlglot.exp.Expression], node_type):
   return sum(isinstance(n, node_type) for n in walkers)
 
 
-def create(host: str, port: int, db: sqlite3.Connection, lock: threading.Lock, schema: Path, **kwargs) -> None:
+def create(
+  label: int, host: str, port: int, db: sqlite3.Connection, lock: threading.Lock, schema: Path, **kwargs
+) -> None:
   cursor = db.cursor()
 
   defaults = {'UserLoginSchema': 'POST', 'UserInsertSchema': 'POST'}
@@ -104,26 +106,32 @@ def create(host: str, port: int, db: sqlite3.Connection, lock: threading.Lock, s
                 asts = sqlglot.parse(query, dialect='sqlite')
               except (sqlglot.errors.ParseError, sqlglot.errors.TokenError):
                 with lock:
-                  db.execute(
-                    """
-                    INSERT INTO payloads (payload, label, error)
-                    VALUES (?, ?, ?)
-                    """,
-                    (query, 1, 1),
-                  )
+                  try:
+                    cursor.execute(
+                      """
+                      INSERT INTO payloads (payload, label, error)
+                      VALUES (?, ?, ?)
+                      """,
+                      (query, label, 0),
+                    )
+                  except sqlite3.IntegrityError:
+                    return Response(None, status=200)
 
                   db.commit()
 
                 return Response(None, status=200)
               else:
                 with lock:
-                  cursor.execute(
-                    """
-                    INSERT INTO payloads (payload, label, error)
-                    VALUES (?, ?, ?)
-                    """,
-                    (query, 1, 0),
-                  )
+                  try:
+                    cursor.execute(
+                      """
+                      INSERT INTO payloads (payload, label, error)
+                      VALUES (?, ?, ?)
+                      """,
+                      (query, label, 0),
+                    )
+                  except sqlite3.IntegrityError:
+                    return Response(None, status=200)
 
                   rowid = cursor.lastrowid
 
@@ -256,26 +264,32 @@ def create(host: str, port: int, db: sqlite3.Connection, lock: threading.Lock, s
                 asts = sqlglot.parse(query, dialect='sqlite')
               except (sqlglot.errors.ParseError, sqlglot.errors.TokenError):
                 with lock:
-                  db.execute(
-                    """
-                    INSERT INTO payloads (payload, label, error)
-                    VALUES (?, ?, ?)
-                    """,
-                    (query, 1, 1),
-                  )
+                  try:
+                    cursor.execute(
+                      """
+                      INSERT INTO payloads (payload, label, error)
+                      VALUES (?, ?, ?)
+                      """,
+                      (query, label, 0),
+                    )
+                  except sqlite3.IntegrityError:
+                    return Response(None, status=200)
 
                   db.commit()
 
                 return Response(None, status=200)
               else:
                 with lock:
-                  cursor.execute(
-                    """
-                    INSERT INTO payloads (payload, label, error)
-                    VALUES (?, ?, ?)
-                    """,
-                    (query, 1, 0),
-                  )
+                  try:
+                    cursor.execute(
+                      """
+                      INSERT INTO payloads (payload, label, error)
+                      VALUES (?, ?, ?)
+                      """,
+                      (query, label, 0),
+                    )
+                  except sqlite3.IntegrityError:
+                    return Response(None, status=200)
 
                   rowid = cursor.lastrowid
 
@@ -408,26 +422,32 @@ def create(host: str, port: int, db: sqlite3.Connection, lock: threading.Lock, s
                 asts = sqlglot.parse(query, dialect='sqlite')
               except (sqlglot.errors.ParseError, sqlglot.errors.TokenError):
                 with lock:
-                  db.execute(
-                    """
-                    INSERT INTO payloads (payload, label, error)
-                    VALUES (?, ?, ?)
-                    """,
-                    (query, 1, 1),
-                  )
+                  try:
+                    cursor.execute(
+                      """
+                      INSERT INTO payloads (payload, label, error)
+                      VALUES (?, ?, ?)
+                      """,
+                      (query, label, 0),
+                    )
+                  except sqlite3.IntegrityError:
+                    return Response(None, status=200)
 
                   db.commit()
 
                 return Response(None, status=200)
               else:
                 with lock:
-                  cursor.execute(
-                    """
-                    INSERT INTO payloads (payload, label, error)
-                    VALUES (?, ?, ?)
-                    """,
-                    (query, 1, 0),
-                  )
+                  try:
+                    cursor.execute(
+                      """
+                      INSERT INTO payloads (payload, label, error)
+                      VALUES (?, ?, ?)
+                      """,
+                      (query, label, 0),
+                    )
+                  except sqlite3.IntegrityError:
+                    return Response(None, status=200)
 
                   rowid = cursor.lastrowid
 
