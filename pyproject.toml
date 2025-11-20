@@ -5,13 +5,14 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry]
 name = "sqli-xss-ml-detector"
 version = "0.0.1.dev0"
-description = "A simple machine learning for detection SQL Injection and XSS"
+description = "A simple machine learning for detection SQL Injection and XSS (Property of Obserynt)"
 readme = "README.md"
 license = "MIT"
 authors = [
-  "Dwi Mulia Mokoginta <dwi-mulia-mokoginta@protonmail.com>",
-  "Sapwages Triazana",
-  "Sony Surahman",
+  "Dwi Mulia Mokoginta (UPH) <dwi-mulia-mokoginta@protonmail.com>",
+  "Sapwages Triazana (UPH)",
+  "Sony Surahman (UPH)",
+  "Kristian Bintang Marnaek Hutape (UNESA) <krisitanbintang5656@gmail.com>"
 ]
 package-mode = false
 
