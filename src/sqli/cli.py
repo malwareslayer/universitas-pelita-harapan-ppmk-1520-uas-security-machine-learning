@@ -14,7 +14,7 @@ parser = argparse.ArgumentParser(prog='sqli', description='Machine Learning SQL 
 command = parser.add_subparsers(dest='command')
 
 
-def main(argv: Sequence[str] = None) -> int:
+def main(argv: Sequence[str] | None = None) -> int:
   db = command.add_parser('db', help='Database')
   db_command = db.add_subparsers(dest='db')
 
@@ -43,21 +43,21 @@ def main(argv: Sequence[str] = None) -> int:
   run.add_argument('--database', type=Path, default=DATABASE_PATH, help='Path to the database file')
   run.add_argument('--schema', type=Path, default=SCHEMA_PYDANTIC_PATH, help='Path to the pydantic schema file')
 
-  args = parser.parse_args(argv)
+  parse = parser.parse_args(argv)
 
-  match args.command:
+  match parse.command:
     case 'db':
-      match args.db:
+      match parse.db:
         case 'init':
-          initialize(args.path, args.schema)
+          initialize(parse.path, parse.schema)
         case 'seed':
-          generate(args.url, args.name, args.count, args.path)
+          generate(parse.url, parse.name, parse.count, parse.path)
         case _:
           raise NameError('Unknown command')
     case 'flask':
-      match args.flask:
+      match parse.flask:
         case 'run':
-          create(args.label, args.host, args.port, check(args.database), threading.Lock(), args.schema)
+          create(parse.label, parse.host, parse.port, check(parse.database), threading.Lock(), parse.schema)
         case _:
           raise NameError('Unknown command')
     case _:
