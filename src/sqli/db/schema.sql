@@ -47,12 +47,12 @@ CREATE TABLE IF NOT EXISTS asts (
   -- Atomic Metrics
   literals              INTEGER, -- 'Dwi', 'example@example.com', 123, 3.14
   literal_length        INTEGER, -- Sum All Literal Length
-  literal_digits        INTEGER,
-  literal_letters       INTEGER,
-  literal_uppers        INTEGER,
-  literal_lowers        INTEGER,
-  literal_whitespaces   INTEGER,
-  literal_specials      INTEGER,
+  literal_digits        INTEGER, -- 0123456789
+  literal_letters       INTEGER, -- abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
+  literal_uppers        INTEGER, -- ABCDEFGHIJKLMNOPQRSTUVWXYZ
+  literal_lowers        INTEGER, -- abcdefghijklmnopqrstuvwxyz
+  literal_whitespaces   INTEGER, -- Space, Tab, Newline
+  literal_specials      INTEGER, -- Non-Alphanumeric & Non-Whitespace
   literal_equals        INTEGER, -- '='
   literal_single_quotes INTEGER, -- '''
   literal_double_quotes INTEGER, -- '"'
@@ -113,17 +113,17 @@ CREATE TABLE IF NOT EXISTS lexicals (
 
   -- Basic counts
   length           INTEGER, -- total chars
-  digits           INTEGER, -- 0-9
+  digits           INTEGER, -- 0123456789
   ratio_digits     REAL,
-  letters          INTEGER, -- a-zA-Z
+  letters          INTEGER, -- abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
   ratio_letters    REAL,
-  uppers           INTEGER, -- A-Z
+  uppers           INTEGER, -- ABCDEFGHIJKLMNOPQRSTUVWXYZ
   ratio_upper      REAL,
-  lowers           INTEGER, -- a-z
+  lowers           INTEGER, -- abcdefghijklmnopqrstuvwxyz
   ratio_lower      REAL,
-  whitespaces      INTEGER, -- space, tab, newline
+  whitespaces      INTEGER, -- Space, Tab, Newline
   ratio_whitespace REAL,
-  specials         INTEGER, -- non-alnum & non-whitespace
+  specials         INTEGER, -- Non-Alphanumeric & Non-Whitespace
   ratio_special    REAL,
   shannon          REAL,
 
