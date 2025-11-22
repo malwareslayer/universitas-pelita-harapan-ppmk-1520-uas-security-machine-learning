@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS asts (
   trees    INTEGER, -- Tree Depth
   subtrees INTEGER, -- Subtree Depth
 
+  -- Query Metrics
   subqueries INTEGER, -- SELECT ... FROM ... WHERE ... IN (SELECT ... FROM ...)
   selects    INTEGER, -- SELECT ... FROM ...
   inserts    INTEGER, -- INSERT INTO ... VALUES ...
@@ -32,19 +33,23 @@ CREATE TABLE IF NOT EXISTS asts (
   havings    INTEGER, -- ... HAVING ...
   ins        INTEGER, -- ... IN ...
 
+  -- Set Operations Metrics
   unions     INTEGER, -- ... UNION ...
   intersects INTEGER, -- ... INTERSECT ...
   excepts    INTEGER, -- ... EXCEPT ...
   joins      INTEGER, -- ... JOIN ...
 
+  -- Clause Metrics
   limits  INTEGER, -- ... LIMIT 1
   offsets INTEGER, -- ... OFFSET 1
   orders  INTEGER, -- ... ORDER BY ...
   groups  INTEGER, -- ... GROUP BY ...
+
+  -- CTE Metrics
   ctes    INTEGER, -- WITH ... AS ... ... ...
   withs   INTEGER, -- ... AS ... ... ...
 
-  -- Atomic Metrics
+  -- Literal Metrics
   literals              INTEGER, -- 'Dwi', 'example@example.com', 123, 3.14
   literal_length        INTEGER, -- Sum All Literal Length
   literal_digits        INTEGER, -- 0123456789
@@ -68,14 +73,16 @@ CREATE TABLE IF NOT EXISTS asts (
   literal_repeats       INTEGER, -- '))))', '-----'
   literal_imbalances    INTEGER, -- |count('(') - count(')')|
 
+  -- Atomic Metrics
   identifiers           INTEGER, -- Table Name, Column Name
 
-  -- Expressions: Bitwise, Arithmetic
+  -- Binaries Metrics
   binaries INTEGER, -- Total Bitwise Operators
   bitors   INTEGER, -- |
   bitands  INTEGER, -- &
   bitxors  INTEGER, -- ^
 
+  -- Arithmetic Metrics
   arithmetics     INTEGER, -- Total Arithmetic Operators
   additions       INTEGER, -- +
   subtractions    INTEGER, -- -
@@ -127,6 +134,7 @@ CREATE TABLE IF NOT EXISTS lexicals (
   ratio_special    REAL,
   shannon          REAL,
 
+  -- Special Character Counts
   equals        INTEGER, -- '='
   single_quotes INTEGER, -- '''
   double_quotes INTEGER, -- '"'
@@ -145,16 +153,16 @@ CREATE TABLE IF NOT EXISTS lexicals (
   imbalances INTEGER, -- |count('(') - count(')')|
 
   -- Reserved Keywords
-  has_or      INTEGER,
-  has_and     INTEGER,
-  has_union   INTEGER,
-  has_select  INTEGER,
-  has_insert  INTEGER,
-  has_update  INTEGER,
-  has_delete  INTEGER,
-  has_drop    INTEGER,
-  has_sleep   INTEGER,
-  has_comment INTEGER,
+  ors      INTEGER,
+  ands     INTEGER,
+  unions   INTEGER,
+  selects  INTEGER,
+  inserts  INTEGER,
+  updates  INTEGER,
+  deletes  INTEGER,
+  drops    INTEGER,
+  sleeps   INTEGER,
+  comments INTEGER,
 
   FOREIGN KEY (payload) REFERENCES payloads(id) ON DELETE CASCADE
 );
