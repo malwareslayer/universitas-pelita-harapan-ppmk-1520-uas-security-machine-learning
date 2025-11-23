@@ -9,8 +9,9 @@ class User(Base):
   __faker__ = faker.Faker()
 
   id = FakeColumn(Integer(), primary_key=True, autoincrement=True)
-  username = FakeColumn(String(), faker=__faker__, pattern='user_name', unique=True)
-  email = FakeColumn(String(), faker=__faker__, pattern='email', unique=True)
+  name = FakeColumn(String(), pattern='name')
+  username = FakeColumn(String(), pattern='user_name', unique=True)
+  email = FakeColumn(String(), pattern=['email', 'company_email'], unique=True)
 
 
 __all__ = ['Base', 'User']
