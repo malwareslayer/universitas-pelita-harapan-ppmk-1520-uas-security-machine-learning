@@ -24,7 +24,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     'url',
     type=str,
     nargs='?',
-    default=f'sqlite://{str(Path(__file__).absolute().parent.parent.parent)}/db/main.db',
+    default='sqlite:///db/main.db',
     help='Path To Create The Database For Storing Ingestion Payload Malicious & Benign',
   )
 
