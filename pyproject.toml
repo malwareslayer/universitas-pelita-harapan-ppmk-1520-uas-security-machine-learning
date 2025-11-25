@@ -9,10 +9,11 @@ description = "A semantic-aware machine learning for detection SQL Injection and
 readme = "README.md"
 license = "CUSTOM"
 authors = [
-  "Dwi Mulia Mokoginta (UPH) <dwi-mulia-mokoginta@protonmail.com>",
-  "Kristian Bintang Marnaek Hutapea (UNESA) <kristianbintang5656@gmail.com>",
-  "Sapwages Triazana (UPH)",
-  "Sony Surahman (UPH)"
+  "Dwi Mulia Mokoginta (malwareslayer) <dwi-mulia-mokoginta@protonmail.com>",
+  "Kristian Bintang Marnaek Hutapea (banteng56) <kristianbintang5656@gmail.com>",
+  "Dwi Mulia Mokoginta (Universitas Pelita Harapan) <01085240006@student.uph.edu>",
+  "Sapwages Triazana (Universitas Pelita Harapan) <01085240012@student.uph.edu>",
+  "Sony Surahman (Universitas Pelita Harapan) <01085240001@student.uph.edu>"
 ]
 
 packages = [
