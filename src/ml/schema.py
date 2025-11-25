@@ -18,10 +18,8 @@ class Payload(__base__):
   payload = Column(Text, nullable=False, unique=True)
   dialect = Column(Text)
   label = Column(Integer)
-  error = Column(Integer)
   created = Column(Text, server_default=text('CURRENT_TIMESTAMP'))
 
-  # relationships
   asts = relationship(
     'AST',
     back_populates='payload',
@@ -38,7 +36,7 @@ class AST(__base__):
   __tablename__ = 'asts'
 
   id = Column(Integer, primary_key=True, autoincrement=True)
-  payload = Column(
+  payload_id = Column(
     Integer,
     ForeignKey('payloads.id', ondelete='CASCADE'),
     nullable=False,
@@ -46,163 +44,155 @@ class AST(__base__):
 
   serde = Column(Text)
 
-  # Parse Tree Metrics
-  nodes = Column(Integer)
-  leafs = Column(Integer)
-  trees = Column(Integer)
-  subtrees = Column(Integer)
+  node = Column(Integer)
+  leaf = Column(Integer)
 
-  # Query Metrics
-  subqueries = Column(Integer)
-  selects = Column(Integer)
-  inserts = Column(Integer)
-  updates = Column(Integer)
-  deletes = Column(Integer)
-  creates = Column(Integer)
-  drops = Column(Integer)
-  alters = Column(Integer)
-  wheres = Column(Integer)
-  havings = Column(Integer)
-  ins = Column(Integer)
+  subquery = Column(Integer)
+  select = Column(Integer)
+  _from = Column(Integer, name='from')
+  insert = Column(Integer)
+  update = Column(Integer)
+  delete = Column(Integer)
+  create = Column(Integer)
+  drop = Column(Integer)
+  alter = Column(Integer)
+  where = Column(Integer)
+  having = Column(Integer)
+  _in = Column(Integer, name='in')
 
-  # Set Operations Metrics
-  unions = Column(Integer)
-  intersects = Column(Integer)
-  excepts = Column(Integer)
-  joins = Column(Integer)
+  union = Column(Integer)
+  intersect = Column(Integer)
+  _except = Column(Integer, name='except')
+  join = Column(Integer)
 
-  # Clause Metrics
-  limits = Column(Integer)
-  offsets = Column(Integer)
-  orders = Column(Integer)
-  groups = Column(Integer)
+  limit = Column(Integer)
+  offset = Column(Integer)
+  order = Column(Integer)
+  group = Column(Integer)
 
-  # CTE Metrics
-  ctes = Column(Integer)
-  withs = Column(Integer)
+  cte = Column(Integer)
+  _with = Column(Integer, name='with')
 
-  # Literal Metrics
-  literals = Column(Integer)
+  literal = Column(Integer)
   literal_length = Column(Integer)
-  literal_digits = Column(Integer)
-  literal_letters = Column(Integer)
-  literal_uppers = Column(Integer)
-  literal_lowers = Column(Integer)
-  literal_whitespaces = Column(Integer)
-  literal_specials = Column(Integer)
-  literal_equals = Column(Integer)
-  literal_single_quotes = Column(Integer)
-  literal_double_quotes = Column(Integer)
-  literal_dashes = Column(Integer)
-  literal_slashes = Column(Integer)
-  literal_stars = Column(Integer)
-  literal_semicolons = Column(Integer)
-  literal_percents = Column(Integer)
+
+  literal_digit = Column(Integer)
+  literal_ratio_digit = Column(Float)
+
+  literal_letter = Column(Integer)
+  literal_ratio_letter = Column(Float)
+
+  literal_upper = Column(Integer)
+  literal_ratio_upper = Column(Float)
+
+  literal_lower = Column(Integer)
+  literal_ratio_lower = Column(Float)
+
+  literal_whitespace = Column(Integer)
+  literal_ratio_whitespace = Column(Float)
+
+  literal_punctuation = Column(Integer)
+  literal_ratio_punctuation = Column(Float)
+
+  literal_shannon = Column(Integer)
+
+  literal_equal = Column(Integer)
+  literal_single = Column(Integer)
+  literal_double = Column(Integer)
+  literal_dash = Column(Integer)
+  literal_slash = Column(Integer)
+  literal_star = Column(Integer)
+  literal_semicolon = Column(Integer)
+  literal_percent = Column(Integer)
   literal_parentheses = Column(Integer)
-  literal_commas = Column(Integer)
-  literal_dots = Column(Integer)
-  literal_underscores = Column(Integer)
-  literal_repeats = Column(Integer)
-  literal_imbalances = Column(Integer)
+  literal_comma = Column(Integer)
+  literal_dot = Column(Integer)
+  literal_underscore = Column(Integer)
+  literal_repeat = Column(Integer)
+  literal_imbalance = Column(Integer)
 
-  # Atomic Metrics
-  identifiers = Column(Integer)
+  identifier = Column(Integer)
+  star = Column(Integer)
 
-  # Binaries Metrics
-  binaries = Column(Integer)
-  bitors = Column(Integer)
-  bitands = Column(Integer)
-  bitxors = Column(Integer)
+  binary = Column(Integer)
 
-  # Arithmetic Metrics
-  arithmetics = Column(Integer)
-  additions = Column(Integer)
-  subtractions = Column(Integer)
-  multiplications = Column(Integer)
-  divisions = Column(Integer)
-  modulos = Column(Integer)
+  add = Column(Integer)
+  sub = Column(Integer)
+  mul = Column(Integer)
+  div = Column(Integer)
+  mod = Column(Integer)
 
-  # Conditions Metrics
-  conditions = Column(Integer)
-  eqs = Column(Integer)
-  neqs = Column(Integer)
-  gts = Column(Integer)
-  lts = Column(Integer)
-  gtes = Column(Integer)
-  ltes = Column(Integer)
-  betweens = Column(Integer)
-  cases = Column(Integer)
+  condition = Column(Integer)
+  eq = Column(Integer)
+  neq = Column(Integer)
+  gt = Column(Integer)
+  gte = Column(Integer)
+  lt = Column(Integer)
+  lte = Column(Integer)
+  between = Column(Integer)
+  case = Column(Integer)
+  like = Column(Integer)
 
-  # Predicates Metrics
-  predicates = Column(Integer)
-  ors = Column(Integer)
-  ands = Column(Integer)
-  nots = Column(Integer)
+  predicate = Column(Integer)
+  _or = Column(Integer, name='or')
+  _and = Column(Integer, name='and')
+  _not = Column(Integer, name='not')
 
-  # Other Metrics
-  functions = Column(Integer)
-  comments = Column(Integer)
+  bitwiseor = Column(Integer)
+  bitwiseand = Column(Integer)
+  bitwisexor = Column(Integer)
 
-  payload_obj = relationship('Payload', back_populates='asts')
+  func = Column(Integer)
+  comment = Column(Integer)
+
+  payload = relationship('Payload', back_populates='asts')
 
 
 class Lexical(__base__):
   __tablename__ = 'lexicals'
 
   id = Column(Integer, primary_key=True, autoincrement=True)
-  payload = Column(
+  payload_id = Column(
     Integer,
     ForeignKey('payloads.id', ondelete='CASCADE'),
     nullable=False,
   )
 
-  # Basic counts
   length = Column(Integer)
-  digits = Column(Integer)
-  ratio_digits = Column(Float)
-  letters = Column(Integer)
-  ratio_letters = Column(Float)
-  uppers = Column(Integer)
+  digit = Column(Integer)
+  ratio_digit = Column(Float)
+  letter = Column(Integer)
+  ratio_letter = Column(Float)
+  upper = Column(Integer)
   ratio_upper = Column(Float)
-  lowers = Column(Integer)
+  lower = Column(Integer)
   ratio_lower = Column(Float)
-  whitespaces = Column(Integer)
+  whitespace = Column(Integer)
   ratio_whitespace = Column(Float)
-  specials = Column(Integer)
-  ratio_special = Column(Float)
+  punctuation = Column(Integer)
+  ratio_punctuation = Column(Float)
+
   shannon = Column(Float)
 
   # Special Character Counts
-  equals = Column(Integer)
-  single_quotes = Column(Integer)
-  double_quotes = Column(Integer)
-  dashes = Column(Integer)
-  slashes = Column(Integer)
-  stars = Column(Integer)
-  semicolons = Column(Integer)
-  percents = Column(Integer)
+  equal = Column(Integer)
+  single = Column(Integer)
+  double = Column(Integer)
+  dash = Column(Integer)
+  slash = Column(Integer)
+  star = Column(Integer)
+  semicolon = Column(Integer)
+  percent = Column(Integer)
   parentheses = Column(Integer)
-  commas = Column(Integer)
-  dots = Column(Integer)
-  underscores = Column(Integer)
+  comma = Column(Integer)
+  dot = Column(Integer)
+  underscore = Column(Integer)
 
   # Shape / Structural Weirdness
-  repeats = Column(Integer)
-  imbalances = Column(Integer)
+  repeat = Column(Integer)
+  imbalance = Column(Integer)
 
-  # Reserved Keywords
-  ors = Column(Integer)
-  ands = Column(Integer)
-  unions = Column(Integer)
-  selects = Column(Integer)
-  inserts = Column(Integer)
-  updates = Column(Integer)
-  deletes = Column(Integer)
-  drops = Column(Integer)
-  sleeps = Column(Integer)
-  comments = Column(Integer)
-
-  payload_obj = relationship('Payload', back_populates='lexicals')
+  payload = relationship('Payload', back_populates='lexicals')
 
 
 __all__ = ['__base__', 'Payload', 'AST', 'Lexical']
