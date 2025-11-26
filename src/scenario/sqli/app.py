@@ -1,4 +1,4 @@
-from parser.generator import GenerateVulnSQLInjectionEndpoint
+from parser import GenerateVulnSQLInjectionEndpoint
 
 from .schema import Base
 
