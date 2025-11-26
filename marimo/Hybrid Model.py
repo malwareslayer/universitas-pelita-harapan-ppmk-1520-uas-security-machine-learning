@@ -207,14 +207,16 @@ def _(dataset, polars):
 
 @app.cell
 def _(features):
-  y = features['label']
-  return (y,)
+  labels = features['label']
+  return (labels,)
 
 
 @app.cell
-def _(features, train_test_split, y):
-  X_train, X_test, Y_train, Y_test = train_test_split(features, y, test_size=0.1, random_state=32, stratify=y)
-  return X_test, X_train, Y_test, Y_train
+def _(features, labels, train_test_split):
+  feature_train, feature_test, label_train, label_test = train_test_split(
+    features, labels, test_size=0.1, random_state=32, stratify=labels
+  )
+  return feature_test, feature_train, label_test, label_train
 
 
 @app.cell
@@ -224,15 +226,15 @@ def _(StandardScaler):
 
 
 @app.cell
-def _(X_train, scaler):
-  X_train_scaled = scaler.fit_transform(X_train)
-  return (X_train_scaled,)
+def _(feature_train, scaler):
+  feature_train_scaled = scaler.fit_transform(feature_train)
+  return (feature_train_scaled,)
 
 
 @app.cell
-def _(X_test, scaler):
-  X_test_scaled = scaler.transform(X_test)
-  return (X_test_scaled,)
+def _(feature_test, scaler):
+  feature_test_scaled = scaler.transform(feature_test)
+  return (feature_test_scaled,)
 
 
 @app.cell
@@ -242,14 +244,14 @@ def _(LogisticRegression):
 
 
 @app.cell
-def _(X_train_scaled, Y_train, lr):
-  lr.fit(X_train_scaled, Y_train)
+def _(feature_train_scaled, label_train, lr):
+  lr.fit(feature_train_scaled, label_train)
   return
 
 
 @app.cell
-def _(X_test_scaled, lr):
-  lr_predicate = lr.predict(X_test_scaled)
+def _(feature_test_scaled, lr):
+  lr_predicate = lr.predict(feature_test_scaled)
   return (lr_predicate,)
 
 
@@ -260,26 +262,26 @@ def _(RandomForestClassifier):
 
 
 @app.cell
-def _(X_train, Y_train, rf):
-  rf.fit(X_train, Y_train)
+def _(feature_train, label_train, rf):
+  rf.fit(feature_train, label_train)
   return
 
 
 @app.cell
-def _(X_test, rf):
-  rf_predicate = rf.predict(X_test)
+def _(feature_test, rf):
+  rf_predicate = rf.predict(feature_test)
   return (rf_predicate,)
 
 
 @app.cell
-def _(Y_test, classification_report, lr_predicate):
-  print(classification_report(Y_test, lr_predicate))
+def _(classification_report, label_test, lr_predicate):
+  print(classification_report(label_test, lr_predicate))
   return
 
 
 @app.cell
-def _(Y_test, classification_report, rf_predicate):
-  print(classification_report(Y_test, rf_predicate))
+def _(classification_report, label_test, rf_predicate):
+  print(classification_report(label_test, rf_predicate))
   return
 
 
