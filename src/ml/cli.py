@@ -6,10 +6,9 @@ from pathlib import Path
 
 import requests
 from flask import Flask
+from parser import Base
 from sqlalchemy import create_engine
 from sqlalchemy.exc import ArgumentError, OperationalError
-
-from parser.types import Base
 
 from .schema import __base__
 
