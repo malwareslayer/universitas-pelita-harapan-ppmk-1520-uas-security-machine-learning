@@ -1,7 +1,6 @@
 import faker
+from parser import Base, FakeColumn
 from sqlalchemy import Integer, String
-
-from parser.types import Base, FakeColumn
 
 
 class User(Base):
