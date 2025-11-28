@@ -22,24 +22,34 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
+aiosqlite = ">=0.21.0"
+asyncmy = ">=0.2.10"
+asyncpg = ">=0.31.0"
 faker = ">=38.2.0"
-flask = ">=3.1.2"
+flask = { version = ">=3.1.2", extras = ["async"] }
 ipython = ">=9.7.0"
-marimo = { version = ">=0.18.1", extras = ["sql"] }
+mcp = "^1.22.0"
+marimo = { version = ">=0.18.1", extras = ["sql", "mcp", "recommended"] }
+matplotlib = ">=3.10.7"
 numpy = ">=2.3.5"
-pandas = ">=2.3.3"
+openai = ">=2.8.1"
 poetry = ">=2.2.1"
 poetry-core = ">=2.2.1"
-pydantic = ">=2.12.4"
+polars = ">=1.35.2"
 python = ">=3.11,<4.0"
+python-lsp-server = ">=1.13.2"
+python-lsp-ruff = ">=2.3.0"
+ruff = ">=0.14.6"
 scikit-learn = ">=1.7.2"
 sqlalchemy = ">=2.0.44"
 sqlglot = { version = ">=28.0.0", extras = ["rs"] }
+websockets = ">=15.0.1"
+xgboost-cpu = ">=0.90"
 
 [tool.poetry.group.dev.dependencies]
 cython = ">=3.2.1"
 wheel = ">=0.45.1"
-ruff = ">=0.14.5"
+ruff = ">=0.14.6"
 setuptools = ">=80.9.0"
 
 [tool.poetry.scripts]
