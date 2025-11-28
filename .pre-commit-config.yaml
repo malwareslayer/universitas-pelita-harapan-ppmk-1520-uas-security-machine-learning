@@ -4,8 +4,9 @@ repos:
     hooks:
       - id: ruff-check
         args: [ --fix ]
+        exclude: ^marimo/
       - id: ruff-format
-    exclude: ^marimo/
+        exclude: ^marimo/
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
