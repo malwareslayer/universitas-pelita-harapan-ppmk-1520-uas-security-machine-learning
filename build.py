@@ -9,7 +9,7 @@ setup(
   author='Dwi Mulia Mokoginta',
   package_dir={'parser': 'src/parser'},
   ext_modules=cythonize(
-    [Extension('_core', ['src/parser/_core.pyx'])],
+    [Extension('_core', ['src/parser/_core.py'])],
     compiler_directives={
       'language_level': 3,
       'boundscheck': False,
