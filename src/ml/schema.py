@@ -1,6 +1,5 @@
 from sqlalchemy import (
   Column,
-  Float,
   ForeignKey,
   Integer,
   Text,
@@ -74,45 +73,14 @@ class AST(__base__):
   _with = Column(Integer, name='with')
 
   literal = Column(Integer)
-  literal_length = Column(Integer)
-
-  literal_digit = Column(Integer)
-  literal_ratio_digit = Column(Float)
-
-  literal_letter = Column(Integer)
-  literal_ratio_letter = Column(Float)
-
-  literal_upper = Column(Integer)
-  literal_ratio_upper = Column(Float)
-
-  literal_lower = Column(Integer)
-  literal_ratio_lower = Column(Float)
-
-  literal_whitespace = Column(Integer)
-  literal_ratio_whitespace = Column(Float)
-
-  literal_punctuation = Column(Integer)
-  literal_ratio_punctuation = Column(Float)
-
-  literal_shannon = Column(Integer)
-
-  literal_equal = Column(Integer)
-  literal_single = Column(Integer)
-  literal_double = Column(Integer)
-  literal_dash = Column(Integer)
-  literal_slash = Column(Integer)
-  literal_star = Column(Integer)
-  literal_semicolon = Column(Integer)
-  literal_percent = Column(Integer)
-  literal_parentheses = Column(Integer)
-  literal_comma = Column(Integer)
-  literal_dot = Column(Integer)
-  literal_underscore = Column(Integer)
-  literal_repeat = Column(Integer)
-  literal_imbalance = Column(Integer)
+  string = Column(Integer)
+  number = Column(Integer)
 
   identifier = Column(Integer)
+
   star = Column(Integer)
+  null = Column(Integer)
+  dpipe = Column(Integer)
 
   binary = Column(Integer)
 
@@ -160,37 +128,24 @@ class Lexical(__base__):
 
   length = Column(Integer)
   digit = Column(Integer)
-  ratio_digit = Column(Float)
   letter = Column(Integer)
-  ratio_letter = Column(Float)
   upper = Column(Integer)
-  ratio_upper = Column(Float)
   lower = Column(Integer)
-  ratio_lower = Column(Float)
   whitespace = Column(Integer)
-  ratio_whitespace = Column(Float)
   punctuation = Column(Integer)
-  ratio_punctuation = Column(Float)
+  comment = Column(Integer)
 
-  shannon = Column(Float)
-
-  # Special Character Counts
   equal = Column(Integer)
   single = Column(Integer)
   double = Column(Integer)
   dash = Column(Integer)
+  pipe = Column(Integer)
   slash = Column(Integer)
   star = Column(Integer)
   semicolon = Column(Integer)
   percent = Column(Integer)
   parentheses = Column(Integer)
   comma = Column(Integer)
-  dot = Column(Integer)
-  underscore = Column(Integer)
-
-  # Shape / Structural Weirdness
-  repeat = Column(Integer)
-  imbalance = Column(Integer)
 
   payload = relationship('Payload', back_populates='lexicals')
 
