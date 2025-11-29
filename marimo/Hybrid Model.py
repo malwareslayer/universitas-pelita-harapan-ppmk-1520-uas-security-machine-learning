@@ -6,12 +6,6 @@ app = marimo.App(width="medium")
 
 @app.cell
 def _():
-    from typing import Tuple, List
-    return (List,)
-
-
-@app.cell
-def _():
     import marimo as mo
     return (mo,)
 
@@ -36,6 +30,18 @@ def _():
 
 @app.cell
 def _():
+    import altair
+    return (altair,)
+
+
+@app.cell
+def _():
+    from typing import Dict, List, Tuple
+    return Dict, List
+
+
+@app.cell
+def _():
     from matplotlib import pyplot
     return (pyplot,)
 
@@ -48,6 +54,12 @@ def _():
 
 @app.cell
 def _():
+    from sklearn.ensemble import ExtraTreesClassifier
+    return (ExtraTreesClassifier,)
+
+
+@app.cell
+def _():
     from sklearn.linear_model import LogisticRegression, SGDClassifier
     return LogisticRegression, SGDClassifier
 
@@ -56,6 +68,18 @@ def _():
 def _():
     from sklearn.preprocessing import StandardScaler
     return (StandardScaler,)
+
+
+@app.cell
+def _():
+    from sklearn.model_selection import StratifiedKFold
+    return (StratifiedKFold,)
+
+
+@app.cell
+def _():
+    from sklearn.feature_selection import RFE
+    return
 
 
 @app.cell
@@ -97,45 +121,75 @@ def _(asts, engine, lexicals, mo, payloads):
           p.payload,
           p.dialect,
           p.label,
-        --  a.node, Underfitting (Noisy)
+          a.node,
           a.leaf,
-        --  a.'select', Overfitting
-        --  a.'insert', Overfitting
-        --  a.subquery, Undefitting (Potential)
-        --  a.'union', Underfitting
-        --  a.'having', Undefitting (High Potential)
-        --  a.'union', Underfitting (High Potential)
-        --  a.'order', Underfitting (High Potential)
-          a.literal,
-        --  a.string, Overfitting (Not Represent Anything)
-        --  a.number, Overfitting (Not Represent Anything)
+        --  a.subquery,
+        --  a.'select',
+        --  a.'from',
+        --  a.'insert',
+        --  a.'update',
+        --  a.'delete',
+        --  a.'create',
+        --  a.'drop',
+        --  a.'alter',
+        --  a.'where',
+        --  a.'having',
+        --  a.'union',
+        --  a.'intersect',
+        --  a.'except',
+        --  a.'join',
+        --  a.'limit',
+        --  a.'offset',
+        --  a.'order',
+        --  a.'group',
+        --  a.'cte',
+        --  a.'with',
+        --  a.literal,
+        --  a.string,
+        --  a.number,
           a.identifier,
-        --  a.'null', Underfitting (Lowly Potential)
-        --  a.dpipe, Underfitting (Lowly Potential)
-          a.binary,
-          a.condition,
-        --  a.eq, Fluctuative
-        --  a.'between', Underfitting (Lowly Potential)
-        --  a.'case', Underfitting (High Potential)
-        --  a.'case', Underfitting (Need Benign Case)
+        --  a.star,
+        --  a.'null',
+        --  a.dpipe,
+        --  a.binary,
+        --  a.'add',
+        --  a.'sub',
+        --  a.'mul',
+        --  a.'div',
+        --  a.'mod',
+        --  a.eq,
+        --  a.neq,
+        --  a.gt,
+        --  a.gte,
+        --  a.lt,
+        --  a.lte,
+        --  a.'between',
+        --  a.'case',
         --  a.'like',
           a.predicate,
-        --  a.'or', Overfitting (Lowly Potential)
-        --  a.'and', Overfitting (Lowly Potential)
+          a.condition,
+        --  a.'or',
+        --  a.'and',
+        --  a.'not',
+        --  a.bitwiseor,
+        --  a.bitwiseand,
+        --  a.bitwisexor,
           a.func,
-          a.comment,
-        --  l.length, Overfitting (Not Represent Anything)
-        --  l.digit, Overfitting (Not Represent Anything)
-        --  l.letter, Overfitting (Not Represent Anything)
+        --  a.comment
+        --  l.length,
+        --  l.digit,
+          l.letter,
         --  l.upper,
         --  l.lower,
-          l.whitespace,
-          l.punctuation,
+        --  l.comment,
+          l.whitespace
+        --  l.punctuation
         --  l.single,
-          l.dash,
-        --  l.pipe,
-          l.parentheses,
-          l.comma
+        --  l.equal,
+        --  l.dash
+        --  l.pipe
+        --  l.parentheses
+        --  l.comma
         FROM payloads AS p
         JOIN asts     AS a ON a.payload_id = p.id
         JOIN lexicals AS l ON l.payload_id = p.id;
@@ -197,8 +251,30 @@ def _(feature_test, scaler):
 
 
 @app.cell
+def _(ExtraTreesClassifier):
+    tree = ExtraTreesClassifier(n_estimators=8192, class_weight='balanced')
+    return (tree,)
+
+
+@app.cell
+def _(feature_train_scaled, label_train, tree):
+    tree.fit(feature_train_scaled, label_train)
+    return
+
+
+@app.cell(hide_code=True)
+def _(features, tree):
+    _importances = tree.feature_importances_
+    _pairs = sorted(zip(features.columns, _importances), key=lambda x: x[1], reverse=True)
+
+    for _name, _score in _pairs:
+        print(f"{_name}: {_score:.4f}")
+    return
+
+
+@app.cell
 def _(LogisticRegression):
-    lr = LogisticRegression(max_iter=8192, class_weight='balanced', solver='saga', random_state=32, C=0.8)
+    lr = LogisticRegression(max_iter=8192, class_weight='balanced', solver='saga', random_state=32, C=0.1)
     return (lr,)
 
 
@@ -216,7 +292,7 @@ def _(feature_test_scaled, lr):
 
 @app.cell
 def _(XGBClassifier):
-    rf = XGBClassifier(n_estimators=4096, max_depth=4, learning_rate=0.1, subsample=0.8, gamma=1, reg_lambda=1, reg_alpha=0, eval_metric='logloss', tree_method='hist', random_state=32)
+    rf = XGBClassifier(n_estimators=8192, max_depth=4, learning_rate=0.1, subsample=0.8, gamma=1, reg_lambda=1, reg_alpha=0, eval_metric='logloss', tree_method='hist', random_state=32)
     return (rf,)
 
 
@@ -232,7 +308,7 @@ def _(feature_test_scaled, rf):
     return (rf_predicate,)
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(classification_report, label_test, lr_predicate):
     print(classification_report(label_test, lr_predicate, digits=4))
     return
@@ -341,6 +417,68 @@ def _(
 
     pyplot.tight_layout()
     pyplot.gca()
+    return
+
+
+@app.cell(hide_code=True)
+def _(
+    Dict,
+    List,
+    LogisticRegression,
+    StandardScaler,
+    StratifiedKFold,
+    accuracy_score,
+    altair,
+    features,
+    labels,
+    polars,
+):
+    _records: List[Dict[str, object]] = []
+
+    for split in [5, 10]:
+      _skf: StratifiedKFold = StratifiedKFold(n_splits=split, shuffle=True, random_state=32)
+
+      for _fold, (_train, _valid) in enumerate(_skf.split(features, labels), start=1):
+        _feature_train = features[_train]
+        _feature_valid = features[_valid]
+        _label_train = labels[_train]
+        _label_valid = labels[_valid]
+
+        _scaler = StandardScaler()
+        _feature_train_scaled = _scaler.fit_transform(_feature_train)
+        _feature_valid_scaled = _scaler.transform(_feature_valid)
+
+        _lr = LogisticRegression(max_iter=8192, class_weight='balanced', solver='saga', random_state=32, C=0.8)
+        _lr.fit(_feature_train_scaled, _label_train)
+
+        _lr_predicate = _lr.predict(_feature_valid_scaled)
+        _acc = accuracy_score(_label_valid, _lr_predicate)
+
+        _records.append({
+          "n_splits": [5, 10],
+          "model": "Logistic Regression",
+          "fold": _fold,
+          "accuracy": _acc
+        })
+
+    _r = polars.DataFrame(_records)
+
+    _chart = altair.Chart(_r).mark_line(point=True).encode(
+        x=altair.X("fold:Q", title="Fold"),
+        y=altair.Y("accuracy:Q", title="Accuracy", scale=altair.Scale(domain=[0, 1])),
+        color=altair.Color("model:N", title="Model"),
+        strokeDash=altair.StrokeDash("n_splits:N", title="StratifiedKFold (splits)"),
+        tooltip=[
+            altair.Tooltip("model:N", title="Model"),
+            altair.Tooltip("n_splits:N", title="# Splits"),
+            altair.Tooltip("fold:Q", title="Fold"),
+            altair.Tooltip("accuracy:Q", title="Accuracy", format=".4f")
+        ]
+    ).properties(
+        title="StratifiedKFold Cross-Validation (5 and 10 Splits)"
+    ).interactive()
+
+    _chart
     return
 
 
