@@ -6,12 +6,6 @@ app = marimo.App(width="medium")
 
 @app.cell
 def _():
-    from typing import Tuple, List
-    return (List,)
-
-
-@app.cell
-def _():
     import marimo as mo
     return (mo,)
 
@@ -36,6 +30,12 @@ def _():
 
 @app.cell
 def _():
+    from typing import Tuple, List
+    return (List,)
+
+
+@app.cell
+def _():
     from matplotlib import pyplot
     return (pyplot,)
 
@@ -44,6 +44,12 @@ def _():
 def _():
     from sklearn.model_selection import train_test_split
     return (train_test_split,)
+
+
+@app.cell
+def _():
+    from sklearn.ensemble import ExtraTreesClassifier
+    return (ExtraTreesClassifier,)
 
 
 @app.cell
@@ -101,10 +107,9 @@ def _(asts, engine, lexicals, mo, payloads):
           a.literal,
           a.identifier,
           a.binary,
-          a.condition,
           a.predicate,
-          a.func,
-          a.comment
+          a.condition,
+          a.func
         FROM payloads AS p
         JOIN asts     AS a ON a.payload_id = p.id
         JOIN lexicals AS l ON l.payload_id = p.id;
@@ -123,7 +128,7 @@ def _(dataset, polars):
 
 @app.cell
 def _(polars, selection):
-    features = selection.select(polars.all().exclude(['label']))
+    features = selection.select(polars.all().exclude(['label', 'payload_id', 'serde']))
     return (features,)
 
 
@@ -163,6 +168,37 @@ def _(feature_train, scaler):
 def _(feature_test, scaler):
     feature_test_scaled = scaler.transform(feature_test)
     return (feature_test_scaled,)
+
+
+@app.cell
+def _(ExtraTreesClassifier):
+    tree = ExtraTreesClassifier(n_estimators=4096, max_depth=4, class_weight='balanced')
+    return (tree,)
+
+
+@app.cell
+def _(feature_train_scaled, label_train, tree):
+    tree.fit(feature_train_scaled, label_train)
+    return
+
+
+@app.cell
+def _(tree):
+    importances = tree.feature_importances_
+    return (importances,)
+
+
+@app.cell
+def _(features, importances):
+    pairs = sorted(zip(features.columns, importances), key=lambda x: x[1], reverse=True)
+    return (pairs,)
+
+
+@app.cell(hide_code=True)
+def _(pairs):
+    for name, score in pairs:
+        print(f"{name}: {score:.4f}")
+    return
 
 
 @app.cell
@@ -210,11 +246,6 @@ def _(classification_report, label_test, lr_predicate):
 @app.cell
 def _(classification_report, label_test, rf_predicate):
     print(classification_report(label_test, rf_predicate, digits=4))
-    return
-
-
-@app.cell
-def _():
     return
 
 
